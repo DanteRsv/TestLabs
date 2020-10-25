@@ -2,6 +2,7 @@ from random import randint
 import pandas as pd
 import numpy as np
 
+# тест изменений 1
 
 # это класс предковых особей, их показатели определяются случайны образом
 class Ancestor:
