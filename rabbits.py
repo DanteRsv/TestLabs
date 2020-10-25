@@ -86,6 +86,9 @@ class Predator:
         self.water = 5
         self.age = 0
 
+    def hunt(self):
+        pass
+
 
 # генерируем предков
 rabbit1 = Ancestor('rabbit1', ['Y', 'X'])
@@ -98,15 +101,23 @@ rabbit6 = Ancestor('rabbit6', ['X', 'X'])
 # формируем генофонд популяции
 gene_pool = [rabbit1.reproduction(), rabbit2.reproduction(), rabbit3.reproduction(), rabbit4.reproduction(),
              rabbit5.reproduction(), rabbit6.reproduction()]
-count_limit = 30  # тут задаём предел особей в популяции
-count = 6
-rabbits = pd.DataFrame(columns=['Имя', 'Пол', 'Гены с.о', 'Схема окраса'])  # популяция кроликов
-for i in range(7, count_limit):
+
+# количество лет используемых в симуляции
+years = 30
+# count = 6
+
+# все кролики за всю историю популяции
+rabbits_all_in_history = pd.DataFrame(columns=['Имя', 'Пол', 'Гены с.о', 'Схема окраса'])
+
+# текущая популяция
+current_population = pd.DataFrame(columns=['Имя', 'Пол', 'Гены с.о', 'Схема окраса', 'Возраст'])
+for i in range(7, years):
     # создаём новую особь
     rabbit = Descendent(name=f'rabbit{i}', male_genes=gene_pool[randint(0, (len(gene_pool) - 1))],
                         female_genes=gene_pool[randint(0, (len(gene_pool) - 1))])
     # добавляем новую особь в популяцию
-    rabbits.loc[f'rabbit{i}'] = [rabbit.name, rabbit.sex, rabbit.color_scheme_gen_sum, rabbit.color_scheme]
+    rabbits_all_in_history.loc[f'rabbit{i}'] = [rabbit.name, rabbit.sex, rabbit.color_scheme_gen_sum, rabbit.color_scheme]
+    current_population.loc[f'rabbit{i}'] = [rabbit.name, rabbit.sex, rabbit.color_scheme_gen_sum, rabbit.color_scheme, rabbit.age]
     # добавляем гены новой особи в генофонд популяции
     gene_pool.append(rabbit.reproduction())
     # убиваем особи старше 9 лет
@@ -116,5 +127,5 @@ for i in range(7, count_limit):
             print(f'Умер от старости {gene_pool[(gene_pool.index(j))][4]}')
             gene_pool.pop(gene_pool.index(j))
 
-print(rabbits)
+print(current_population)
 print(gene_pool)
