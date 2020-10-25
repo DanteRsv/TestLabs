@@ -2,9 +2,6 @@ from random import randint
 import pandas as pd
 import numpy as np
 
-# тест изменений 1
-# тест изменений 2
-# тест изменений 3
 
 # это класс предковых особей, их показатели определяются случайны образом
 class Ancestor:
@@ -90,21 +87,29 @@ class Predator:
         self.age = 0
 
 
+# генерируем предков
 rabbit1 = Ancestor('rabbit1', ['Y', 'X'])
 rabbit2 = Ancestor('rabbit2', ['X', 'X'])
 rabbit3 = Ancestor('rabbit3', ['Y', 'X'])
 rabbit4 = Ancestor('rabbit4', ['X', 'X'])
 rabbit5 = Ancestor('rabbit5', ['Y', 'X'])
 rabbit6 = Ancestor('rabbit6', ['X', 'X'])
+
+# формируем генофонд популяции
 gene_pool = [rabbit1.reproduction(), rabbit2.reproduction(), rabbit3.reproduction(), rabbit4.reproduction(),
              rabbit5.reproduction(), rabbit6.reproduction()]
-count_limit = 30
+count_limit = 30  # тут задаём предел особей в популяции
 count = 6
-rabbits = pd.DataFrame(columns=['Имя', 'Пол', 'Гены с.о', 'Схема окраса'])
+rabbits = pd.DataFrame(columns=['Имя', 'Пол', 'Гены с.о', 'Схема окраса'])  # популяция кроликов
 for i in range(7, count_limit):
-    rabbit = Descendent(name=f'rabbit{i}', male_genes=gene_pool[randint(0, (len(gene_pool) - 1))], female_genes=gene_pool[randint(0, (len(gene_pool) - 1))])
+    # создаём новую особь
+    rabbit = Descendent(name=f'rabbit{i}', male_genes=gene_pool[randint(0, (len(gene_pool) - 1))],
+                        female_genes=gene_pool[randint(0, (len(gene_pool) - 1))])
+    # добавляем новую особь в популяцию
     rabbits.loc[f'rabbit{i}'] = [rabbit.name, rabbit.sex, rabbit.color_scheme_gen_sum, rabbit.color_scheme]
+    # добавляем гены новой особи в генофонд популяции
     gene_pool.append(rabbit.reproduction())
+    # убиваем особи старше 9 лет
     for j in gene_pool:
         j[3] += 1
         if j[3] > 9:
